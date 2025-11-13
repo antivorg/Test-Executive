@@ -1,0 +1,109 @@
+
+
+
+
+window:
+  0:
+    type: shell
+    bind: stdout
+
+  layout:
+    width: 10
+    height: 10
+
+thread_library: thread_lib_1
+
+io_objects:
+  gui_in:
+    # All GUI windget inputs will be place onto this queue
+    type: Queue
+
+  test_mutex:
+    # Can be used by the user how they wish
+    type: Lock
+  
+  start:
+    type: Lock
+
+  lifo:
+    type: LifoQueue
+  
+  priority:
+    type: PriorityQueue
+  
+  dewque:
+    type: deque
+  
+  Lock:
+    type: Lock
+  
+  areyalocal:
+    type: local
+  
+  stwing:
+    type: str
+
+  iandcount:
+    type: int
+
+  whenigetintothepool:
+    type: float
+
+  imnotterribly:
+    type: complex
+
+  readmy:
+    type: list
+
+  ibeneedingthat:
+    type: dict
+
+  set:
+    type: set
+
+  isittruewhattheysay:
+    type: bool
+
+  dont:
+    type: bytes
+
+  many:
+    type: bytearray
+
+  nothing:
+    type: NoneType
+
+threads:
+  0:
+    name: Handle GUI inputs
+    thread_definition: gui_input_handling
+    io_binds: [gui_in, test_mutex]
+    daemon: Yes
+  1:
+    name: Test some mutable types
+    thread_definition: mutable
+    io_binds: [gui_in, test_mutex, start]
+    daemon: Yes
+  2:
+    name: fucking everything
+    thread_definition: everything
+    io_binds: [
+      gui_in, test_mutex, start, lifo, priority, dewque, Lock, areyalocal,
+      stwing, iandcount, whenigetintothepool, imnotterribly, readmy,
+      ibeneedingthat, set, isittruewhattheysay, dont, many, nothing
+    ]
+    daemon: Yes
+
+file_descriptors: 
+  0:
+    name: Standard input
+    label: stdin
+  1:
+    name: Standard output
+    label: stdout
+  2:
+    name: Standard error
+    label: stderr
+  3:
+    name: Results file
+    label: results_file

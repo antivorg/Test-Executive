@@ -1,0 +1,30 @@
+
+window:
+  layout:
+
+thread_library:
+
+io_objects:
+  gui_in:
+    # All GUI windget inputs will be place onto this queue
+    type: Queue
+  test_mutex:
+    # Can be used by the user how they wish
+    type: Lock
+
+threads:
+  0:
+    name: Handle GUI inputs
+    thread_definition: gui_input_handling
+    io_binds: [gui_in, test_mutex]
+
+file_descriptors: 
+  0:
+    name: Standard input
+    label: stdin
+  1:
+    name: Standard output
+    label: stdout
+  2:
+    name: Standard error
+    label: stderr
