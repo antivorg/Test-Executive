@@ -64,11 +64,32 @@ class thread_model:
             self._io_dict[io_object_name] = obj
         return 0
 
-    def create_fd_objects(self):
+    def create_fd_funcs(self):
         self._fd_dict = {}
+        contents = ''
         for fd_number in self._config['file_descriptors']:
             fd_params = self._config['file_descriptors'][fd_number]
-            
+            for field in ['name', 'label', 'io_binds']:
+                if not field in fd_params:
+                    print(
+                        f'{sys.argv[0]}: YAML missing key "{field}:" in '
+                        f'"file_descriptors:{fd_number}:"'
+                    )
+                    return -1
+                if fd_params[field] == None:
+                    print(
+                        f'{sys.argv[0]}: YAML missing value for key '
+                        f'"file_descriptors:{fd_number}:{field}:"'
+                    )
+                    return -1
+            name = fd_params['label']
+            self._fd_dict[name] = {
+                'name': fd_params['name'],
+                'io_binds':{}
+            }
+            for io in fd_params['io_binds']:
+                self._fd_dict[name]['io_binds'][io] = self._io_dict[io]
+        return 0
 
     def create_thread_model(self):
         self._threads = []
@@ -76,6 +97,7 @@ class thread_model:
             'lock':threading.Lock(),
             'thread_error_stack':[]
         }
+        # Create user threads
         if self._config['thread_library'] == None:
             print(
                 f'{sys.argv[0]}: YAML no "thread_library:" value defined'
@@ -127,6 +149,20 @@ class thread_model:
                     daemon=thread['daemon']
                 )
             )
+        # Create file descriptor threads
+        for fd_key in self._fd_dict:
+            fd = self._fd_dict[fd_key]
+            self._threads.append(
+                threading.Thread(
+                    target=self._thread_wrapper,
+                    name=fd['name'],
+                    args=(
+                        self._thread_fd, fd['io_binds'],
+                        self._error_dict, fd['name']
+                    ),
+                    daemon=True
+                )
+            )
         return 0
 
     def run(self):
@@ -143,6 +179,9 @@ class thread_model:
                     'call_stack':traceback.format_exc()
                 })
 
+    def _thread_fd(self, dict):
+        pass
+
 class thread_manager:
 
     def __init__(self, config):
@@ -151,7 +190,7 @@ class thread_manager:
     def thread_init(self):
         status = self._thread_model.create_io_objects()
         if status == 0:
-            status = self._thread_model.create_fd_objects()
+            status = self._thread_model.create_fd_funcs()
         if status == 0:
             status = self._thread_model.create_thread_model()
         return status
@@ -166,6 +205,6 @@ class thread_manager:
             return -1
         return 0
 
-    def monitor_application():
+    def monitor_application(self):
         pass
 

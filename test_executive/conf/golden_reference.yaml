@@ -11,6 +11,12 @@ io_objects:
   test_mutex:
     # Can be used by the user how they wish
     type: Lock
+  stdin_queue:
+    type: Queue
+  stdout_queue:
+    type: Queue
+  stderr_queue:
+    type: Queue
 
 threads:
   0:
@@ -22,9 +28,12 @@ file_descriptors:
   0:
     name: Standard input
     label: stdin
+    io_binds: [stdin_queue]
   1:
     name: Standard output
     label: stdout
+    io_binds: [stdout_queue]
   2:
     name: Standard error
     label: stderr
+    io_binds: [stderr_queue]

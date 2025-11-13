@@ -32,8 +32,8 @@ if __name__ == '__main__':
         # launch application
         if status == 0:
             status = thread_manager_obj.launch_application()
-        while status == 0:
-            status = thread_manager_obj.monitor_application()
+        #while status == 0:
+        #    status = thread_manager_obj.monitor_application()
     # release lock file
     setup.release_lock_file()
 

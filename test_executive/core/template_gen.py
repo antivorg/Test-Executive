@@ -15,7 +15,7 @@ def template_gen(config):
     gen_file_contents = '\nfrom threading import Lock, local\nfrom queue '
     gen_file_contents += 'import Queue, LifoQueue, PriorityQueue\nfrom '
     gen_file_contents += 'collections import deque\n\n# This file has been '
-    gen_file_contents += 'automatically generated\n'
+    gen_file_contents += 'automatically generated'
     for thread_key in config['threads']:
         thread = config['threads'][thread_key]
         if not 'thread_definition' in thread:
