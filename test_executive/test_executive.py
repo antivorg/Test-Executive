@@ -7,7 +7,7 @@ if __name__ == '__main__':
     user_dir = os.getcwd()
     os.chdir(sys.path[0])
 
-import lib.setup as setup
+import library.setup as setup
 import core.thread_manager as thread_manager
 import core.template_gen as template_gen
 
