@@ -2,7 +2,7 @@
 import os
 import sys
 
-GEN_PATH = 'plugins' + os.sep + 'gen' + os.sep
+GEN_PATH = 'gen' + os.sep
 
 def template_gen(config):
     # Create lib file
