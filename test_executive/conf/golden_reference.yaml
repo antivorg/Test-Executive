@@ -2,6 +2,8 @@
 window:
   layout:
 
+scripts:
+
 thread_library:
 
 io_objects:

@@ -1,8 +1,6 @@
-
-from threading import Lock, local
+from threading import Lock, local, Condition, Semaphore, Event
 from queue import Queue, LifoQueue, PriorityQueue
 from collections import deque
-
 # This file has been automatically generated
 
 
@@ -45,6 +43,9 @@ def everything(thread_io_dict):
 			priority: type=<PriorityQueue>
 			dewque: type=<deque>
 			Lock: type=<Lock>
+			whatsthecondition: type=<Condition>
+			semiwhat: type=<Semaphore>
+			didyouhearaboutthe: type=<Event>
 			areyalocal: type=<local>
 			stwing: type=<str>
 			iandcount: type=<int>
@@ -63,6 +64,9 @@ def everything(thread_io_dict):
 		assert(type(thread_io_dict["lifo"])==LifoQueue)
 		assert(type(thread_io_dict["priority"])==PriorityQueue)
 		assert(type(thread_io_dict["dewque"])==deque)
+		assert(type(thread_io_dict["whatsthecondition"])==Condition)
+		assert(type(thread_io_dict["semiwhat"])==Semaphore)
+		assert(type(thread_io_dict["didyouhearaboutthe"])==Event)
 		assert(type(thread_io_dict["areyalocal"])==local)
 		assert(type(thread_io_dict["stwing"])==str)
 		assert(type(thread_io_dict["iandcount"])==int)

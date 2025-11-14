@@ -12,9 +12,13 @@ def template_gen(config):
             '"thread_lib:"'
         )
         return -1
-    gen_file_contents = '\nfrom threading import Lock, local\nfrom queue '
-    gen_file_contents += 'import Queue, LifoQueue, PriorityQueue\nfrom '
-    gen_file_contents += 'collections import deque\n\n# This file has been '
+    import_list = [
+        'from threading import Lock, local, Condition, Semaphore, Event',
+        'from queue import Queue, LifoQueue, PriorityQueue',
+        'from collections import deque'
+    ]
+    gen_file_contents = '\n'.join(import_list)
+    gen_file_contents += '\n# This file has been '
     gen_file_contents += 'automatically generated'
     for thread_key in config['threads']:
         thread = config['threads'][thread_key]

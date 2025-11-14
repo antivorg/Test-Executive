@@ -21,6 +21,9 @@ class thread_model:
         'PriorityQueue'     : queue.PriorityQueue,
         'deque'             : collections.deque,
         'Lock'              : threading.Lock,
+        'Condition'         : threading.Condition,
+        'Semaphore'         : threading.Semaphore,
+        'Event'             : threading.Event,
         'local'             : threading.local,
         # generic built-ins, supporting defaults
         'str'               : str,
