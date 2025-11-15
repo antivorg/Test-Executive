@@ -7,6 +7,8 @@ import collections
 import importlib
 import traceback
 
+import gui.tk_impl as tk_impl
+
 THREAD_LIB_PATH = 'plugins' + os.sep
 
 def return_none():
@@ -48,6 +50,7 @@ class thread_model:
 
     def create_io_objects(self):
         self._io_dict = {}
+        gui_in_queue = None
         for io_object_name in self._config['io_objects']:
             io_object = self._config['io_objects'][io_object_name]
             if not 'type' in io_object:
@@ -65,7 +68,9 @@ class thread_model:
                 return -1
             obj = self._supported_io_objects[io_object['type']]()
             self._io_dict[io_object_name] = obj
-        return 0
+            if io_object_name == 'gui_in':
+                gui_in_queue = obj
+        return obj, 0
 
     def create_fd_funcs(self):
         self._fd_dict = {}
@@ -189,13 +194,19 @@ class thread_manager:
 
     def __init__(self, config):
         self._thread_model = thread_model(config)
+        self._gui_in_queue = None
 
     def thread_init(self):
-        status = self._thread_model.create_io_objects()
+        self._gui_in_queue, status = self._thread_model.create_io_objects()
         if status == 0:
             status = self._thread_model.create_fd_funcs()
         if status == 0:
             status = self._thread_model.create_thread_model()
+        return status
+
+    def gui_init(self, config):
+        self._gui = tk_impl.gui()
+        status = self._gui.configure(config, self._gui_in_queue)
         return status
 
     def launch_application(self):
@@ -206,6 +217,7 @@ class thread_manager:
                 f'application "{ex}"'
             )
             return -1
+        self._gui.main_loop()
         return 0
 
     def monitor_application(self):
